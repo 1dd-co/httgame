@@ -3,6 +3,10 @@ body {
     text-align: center;
   }
   
+  html {
+    height: 100vh;
+    overflow: hidden;
+  }
   h1 {
     margin-top: 20px;
   }
