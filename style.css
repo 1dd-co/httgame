@@ -30,7 +30,7 @@ body {
     height: 30px;
     border: 2px solid black;
     border-radius: 10px;
-    margin: 20px 10px;
+    margin: 0;
     padding: 10px;
     background-color: lightblue;
     cursor: pointer;
