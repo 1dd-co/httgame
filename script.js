@@ -10,9 +10,9 @@ const popupTitleElement = document.getElementById('popupTitle');
 const popupTextElement = document.getElementById('popupText');
 const reasonElement = document.getElementById('reason');
 const playAgainBtn = document.getElementById('playAgainBtn');
-const pointSound = new Audio('images/point.mp3');
-const gameOverSound = new Audio('images/game_over.mp3');
-const gameWonSound = new Audio('images/game_won.mp3');
+const pointSound = new Audio('point.wav');
+const gameOverSound = new Audio('game_over.wav');
+const gameWonSound = new Audio('game_won.wav');
 
 let score = 0;
 let startTime;
@@ -58,7 +58,7 @@ function handleDrop(event) {
         gameOver();
     }
 
-    if (score === 7) {
+    if (score === 5) {
         playSound(gameWonSound);
         gameWon();
     }
@@ -156,12 +156,10 @@ playAgainBtn.addEventListener('click', () => {
     location.reload(); // Reload the page to start a new game
 });
 
-const garbageElements = document.querySelectorAll('.garbage');
 garbageElements.forEach(garbage => {
     garbage.addEventListener('dragstart', handleDragStart);
 });
 
-const bins = document.querySelectorAll('.bin');
 bins.forEach(bin => {
     bin.addEventListener('dragover', handleDragOver);
     bin.addEventListener('drop', handleDrop);
