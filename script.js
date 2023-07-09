@@ -2,6 +2,14 @@
 var interactDraggable;
 var interactDropzone;
 
+// Counter variables
+var score = 0;
+var totalGarbages = 5;
+var garbagesInCorrectBins = 0;
+
+// Start time
+var startTime;
+
 function initializeGame() {
   interactDraggable = interact('.garbage').draggable({
     inertia: true,
@@ -78,46 +86,68 @@ function checkBin(garbage, binId) {
   }
 }
 
-// Counter variables
-var score = 0;
-var totalGarbages = 5;
-var garbagesInCorrectBins = 0;
-
 // Game over
 function endGame() {
-  interactDraggable.unset();
-  interactDropzone.unset();
-
-  // Reset garbage positions
-  var garbages = document.querySelectorAll('.garbage');
-  for (var i = 0; i < garbages.length; i++) {
-    garbages[i].style.transform = 'none';
-    garbages[i].setAttribute('data-x', '0');
-    garbages[i].setAttribute('data-y', '0');
-    garbages[i].style.display = 'block';
+    interactDraggable.unset();
+    interactDropzone.unset();
+  
+    // Reset garbage positions
+    var garbages = document.querySelectorAll('.garbage');
+    for (var i = 0; i < garbages.length; i++) {
+      garbages[i].style.transform = 'none';
+      garbages[i].setAttribute('data-x', '0');
+      garbages[i].setAttribute('data-y', '0');
+      garbages[i].style.display = 'block';
+    }
+  
+    var finalScore = score;
+    score = 0;
+    garbagesInCorrectBins = 0;
+  
+    document.getElementById('score').textContent = 'Score: ' + finalScore;
+  
+    var currentTime = new Date().getTime();
+    var elapsedTime = (currentTime - startTime) / 1000; // Calculate elapsed time in seconds
+  
+    var popup = document.createElement('div');
+    popup.className = 'popup';
+  
+    if (finalScore === totalGarbages * 10) {
+      popup.innerHTML =
+        'Congratulations! You cleared the game with a perfect score of ' +
+        finalScore +
+        ' in ' +
+        elapsedTime.toFixed(1) +
+        ' seconds.';
+    } else {
+      popup.innerHTML =
+        'Game Over! Your score is ' +
+        finalScore +
+        ' in ' +
+        elapsedTime.toFixed(1) +
+        ' seconds.';
+    }
+  
+    var overlay = document.createElement('div');
+    overlay.className = 'overlay';
+    overlay.appendChild(popup);
+  
+    document.body.appendChild(overlay);
+  
+    // Close popup on click
+    overlay.addEventListener('click', function () {
+      overlay.remove();
+      initializeGame(); // Start a new game
+    });
   }
-
-  var finalScore = score;
-  score = 0;
-  garbagesInCorrectBins = 0;
-
-  document.getElementById('score').textContent = 'Score: ' + finalScore;
-
-  var popup = document.createElement('div');
-  popup.className = 'popup';
-  popup.innerHTML = 'Game Over! Your score is ' + finalScore;
-
-  var overlay = document.createElement('div');
-  overlay.className = 'overlay';
-  overlay.appendChild(popup);
-
-  document.body.appendChild(overlay);
-
-  // Close popup on click
-  overlay.addEventListener('click', function () {
-    overlay.remove();
-    initializeGame(); // Start a new game
-  });
-}
-
-initializeGame(); // Start the initial game
+  
+  // ...
+  
+  // Start the stopwatch
+  function startStopwatch() {
+    startTime = new Date().getTime();
+  }
+  
+  initializeGame(); // Start the initial game
+  startStopwatch(); // Start the stopwatch
+  
