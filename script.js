@@ -1,62 +1,81 @@
-// Garbage items and their corresponding bins
-const garbageItems = [
-    { name: "carrot", bin: "food-bin" },
-    { name: "can", bin: "recycle-bin" },
-    { name: "plastic bottle", bin: "recycle-bin" },
-    { name: "newspaper", bin: "recycle-bin" },
-    { name: "plastic bag", bin: "recycle-bin" }
-  ];
+// Drag and drop
+interact('.garbage').draggable({
+    inertia: true,
+    modifiers: [
+      interact.modifiers.restrictRect({
+        restriction: 'parent',
+        endOnly: true
+      })
+    ],
+    autoScroll: true,
+    onmove: dragMoveListener
+  });
   
-  // Variables to store the score and number of correct moves
-  let score = 0;
-  let correctMoves = 0;
+  // Drop targets
+  var recycleBin = document.getElementById('recycle-bin');
+  var generalTrashBin = document.getElementById('general-trash-bin');
+  var foodWasteBin = document.getElementById('food-waste-bin');
   
-  // Function to check if all garbage items are correctly sorted
-  function checkGameOver() {
-    if (correctMoves === garbageItems.length) {
-      alert("Game Over. Your final score is " + score);
+  // Counter variables
+  var score = 0;
+  var totalGarbages = 5;
+  var garbagesInCorrectBins = 0;
+  
+  // Drag move listener
+  function dragMoveListener(event) {
+    var target = event.target;
+    var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+    var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+  
+    target.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+    target.setAttribute('data-x', x);
+    target.setAttribute('data-y', y);
+  }
+  
+  // Check if garbage is in the correct bin
+  function checkBin(garbage, binId) {
+    if (garbage.id === 'carrots' && binId === 'food-waste-bin') {
+      return true;
+    } else if (
+      (garbage.id === 'can' ||
+        garbage.id === 'plastic-bottle' ||
+        garbage.id === 'newspaper' ||
+        garbage.id === 'plastic-bag') &&
+      binId === 'recycle-bin'
+    ) {
+      return true;
+    } else {
+      return false;
     }
   }
   
-  // Function to handle dragging the garbage items
-  function drag(event) {
-    event.dataTransfer.setData("text", event.target.id);
-  }
+  // Drop event listeners
+  interact('.trash-bin').dropzone({
+    accept: '.garbage',
+    ondrop: function (event) {
+      var garbage = event.relatedTarget;
+      var bin = event.target;
   
-  // Function to handle dropping the garbage items
-  function drop(event) {
-    event.preventDefault();
-    const garbageId = event.dataTransfer.getData("text");
-    const garbage = document.getElementById(garbageId);
-    const binId = event.target.id;
-    const bin = document.getElementById(binId);
+      if (checkBin(garbage, bin.id)) {
+        garbage.style.display = 'none';
+        score += 10;
+        garbagesInCorrectBins++;
   
-    const garbageItem = garbageItems.find(item => item.name === garbageId);
-    if (garbageItem && binId === garbageItem.bin) {
-      bin.appendChild(garbage);
-      score++;
-      correctMoves++;
-      document.getElementById("score").textContent = "Score: " + score;
+        if (garbagesInCorrectBins === totalGarbages) {
+          endGame();
+        }
+      } else {
+        endGame();
+      }
+  
+      document.getElementById('score').textContent = 'Score: ' + score;
     }
-  
-    checkGameOver();
-  }
-  
-  // Function to handle allowing dropping on the trash bins
-  function allowDrop(event) {
-    event.preventDefault();
-  }
-  
-  // Add event listeners to the trash bins
-  const bins = document.querySelectorAll(".trash-bin");
-  bins.forEach(bin => {
-    bin.addEventListener("drop", drop);
-    bin.addEventListener("dragover", allowDrop);
   });
   
-  // Add event listeners to the garbage items
-  const garbageItemsElements = document.querySelectorAll(".garbage");
-  garbageItemsElements.forEach(item => {
-    item.addEventListener("dragstart", drag);
-  });
+  // Game over
+  function endGame() {
+    interact('.garbage').unset();
+    interact('.trash-bin').unset();
+    alert('Game Over! Your score is ' + score);
+  }
   

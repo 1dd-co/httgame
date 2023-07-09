@@ -6,22 +6,21 @@
     <link rel="stylesheet" href="style.css" />
     <title>Garbage Sorting Game</title>
   </head>
-
   <body>
     <h1>Garbage Sorting Game</h1>
     <div class="game-container">
-      <div class="trash-bin" id="food-bin"></div>
-      <div class="trash-bin" id="recycle-bin"></div>
-      <div class="trash-bin" id="general-bin"></div>
+      <div class="trash-bin" id="recycle-bin">Recycle Bin</div>
+      <div class="trash-bin" id="general-trash-bin">General Trash Bin</div>
+      <div class="trash-bin" id="food-waste-bin">Food Waste Bin</div>
+      <div class="garbage" id="carrots">Carrots</div>
+      <div class="garbage" id="can">Can</div>
+      <div class="garbage" id="plastic-bottle">Plastic Bottle</div>
+      <div class="garbage" id="newspaper">Newspaper</div>
+      <div class="garbage" id="plastic-bag">Plastic Bag</div>
     </div>
     <div id="score">Score: 0</div>
 
-    <div class="garbage" id="carrot" draggable="true"></div>
-    <div class="garbage" id="can" draggable="true"></div>
-    <div class="garbage" id="plastic-bottle" draggable="true"></div>
-    <div class="garbage" id="newspaper" draggable="true"></div>
-    <div class="garbage" id="plastic-bag" draggable="true"></div>
-
+    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
