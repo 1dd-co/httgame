@@ -1,49 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
     <title>Garbage Sorting Game</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
+
   <body>
     <h1>Garbage Sorting Game</h1>
-    <div class="score">Score: <span id="score">0</span></div>
-    <div class="timer">Time: <span id="timer">00:00</span></div>
-    <div class="bins">
-      <div id="recycleBin" class="bin">
-        <h2>Recycle Bin</h2>
-      </div>
-      <div id="foodWasteBin" class="bin">
-        <h2>Food Waste Bin</h2>
-      </div>
-      <div id="generalTrashBin" class="bin">
-        <h2>General Trash Bin</h2>
-      </div>
-      <div id="dangerTrashCan" class="bin">
-        <h2>Danger Trash Can</h2>
-      </div>
-      <div id="infectiousTrashCan" class="bin">
-        <h2>Infectious Trash Can</h2>
-      </div>
+    <div class="game-container">
+      <div class="trash-bin" id="food-bin"></div>
+      <div class="trash-bin" id="recycle-bin"></div>
+      <div class="trash-bin" id="general-bin"></div>
     </div>
-    <div id="garbageContainer">
-      <div id="carrots" class="garbage">Carrots</div>
-      <img id="can" class="garbage" src="images/can.jpg" />
-      <img id="plasticBottle" class="garbage" src="images/plasticbottle.jpg" />
-      <img id="newspaper" class="garbage" src="images/newspaper.jpg" />
-      <img id="plasticBag" class="garbage" src="images/plasticbag.webp" />
-      <img id="battery" class="garbage" src="images/battery.jpg" />
-      <img id="usedTampon" class="garbage" src="images/tampon.jpg" />
-    </div>
-
-    <div id="popup" class="hide">
-      <div class="popup-content">
-        <h2 id="popupTitle"></h2>
-        <p id="popupText"></p>
-        <p id="reason" class="hide"></p>
-        <button id="playAgainBtn">Play Again</button>
-      </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/interactjs@1.10.11"></script>
+    <div id="score">Score: 0</div>
 
     <script src="script.js"></script>
   </body>
