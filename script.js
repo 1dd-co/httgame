@@ -12,157 +12,169 @@ const reasonElement = document.getElementById('reason');
 const playAgainBtn = document.getElementById('playAgainBtn');
 const pointSound = new Audio('point.wav');
 const gameOverSound = new Audio('game_over.wav');
-const gameWonSound = new Audio('game_won.wav');
+const winSound = new Audio('win.wav');
 
 let score = 0;
 let startTime;
 let timerInterval;
 
 function handleDragStart(event) {
-    event.dataTransfer.setData('text/plain', event.target.id);
+  const garbageElement = event.target;
+  event.dataTransfer.setData('text/plain', garbageElement.id);
+}
+
+function handleDragMove(event) {
+  event.preventDefault();
+}
+
+function handleDragEnd(event) {
+  event.preventDefault();
 }
 
 function handleDragOver(event) {
-    event.preventDefault();
+  event.preventDefault();
 }
 
 function handleDrop(event) {
-    event.preventDefault();
-    const garbageId = event.dataTransfer.getData('text/plain');
-    const garbageElement = document.getElementById(garbageId);
-    const binId = event.target.id;
+  event.preventDefault();
+  const garbageId = event.dataTransfer.getData('text/plain');
+  const garbageElement = document.getElementById(garbageId);
+  const binId = event.target.id;
 
-    if (binId === 'recycleBin' && isRecyclable(garbageId)) {
-        increaseScore();
-        playSound(pointSound);
-        garbageElement.classList.add('hide');
-    } else if (binId === 'foodWasteBin' && isFoodWaste(garbageId)) {
-        increaseScore();
-        playSound(pointSound);
-        garbageElement.classList.add('hide');
-    } else if (binId === 'generalTrashBin' && isGeneralTrash(garbageId)) {
-        increaseScore();
-        playSound(pointSound);
-        garbageElement.classList.add('hide');
-    } else if (binId === 'dangerTrashCan' && isDangerTrash(garbageId)) {
-        increaseScore();
-        playSound(pointSound);
-        garbageElement.classList.add('hide');
-    } else if (binId === 'infectiousTrashCan' && isInfectiousTrash(garbageId)) {
-        increaseScore();
-        playSound(pointSound);
-        garbageElement.classList.add('hide');
-    } else {
-        showReason(garbageId, binId);
-        playSound(gameOverSound);
-        gameOver();
-    }
+  if (binId === 'recycleBin' && isRecyclable(garbageId)) {
+    increaseScore();
+    playSound(pointSound);
+    garbageElement.classList.add('hide');
+  } else if (binId === 'foodWasteBin' && isFoodWaste(garbageId)) {
+    increaseScore();
+    playSound(pointSound);
+    garbageElement.classList.add('hide');
+  } else if (binId === 'generalTrashBin' && isGeneralTrash(garbageId)) {
+    increaseScore();
+    playSound(pointSound);
+    garbageElement.classList.add('hide');
+  } else if (binId === 'dangerTrashCan' && isDangerTrash(garbageId)) {
+    increaseScore();
+    playSound(pointSound);
+    garbageElement.classList.add('hide');
+  } else if (binId === 'infectiousTrashCan' && isInfectiousTrash(garbageId)) {
+    increaseScore();
+    playSound(pointSound);
+    garbageElement.classList.add('hide');
+  } else {
+    showReason(garbageId, binId);
+    playSound(gameOverSound);
+    gameOver();
+  }
 
-    if (score === 5) {
-        playSound(gameWonSound);
-        gameWon();
-    }
+  if (score === 5) {
+    playSound(winSound);
+    gameWon();
+  }
 }
 
 function isRecyclable(garbageId) {
-    return garbageId !== 'carrots' && garbageId !== 'plasticBag' && garbageId !== 'battery';
+  return garbageId !== 'carrots' && garbageId !== 'plasticBag' && garbageId !== 'battery';
 }
 
 function isFoodWaste(garbageId) {
-    return garbageId === 'carrots';
+  return garbageId === 'carrots';
 }
 
 function isGeneralTrash(garbageId) {
-    return garbageId === 'plasticBag';
+  return garbageId === 'plasticBag';
 }
 
 function isDangerTrash(garbageId) {
-    return garbageId === 'battery';
+  return garbageId === 'battery';
 }
 
 function isInfectiousTrash(garbageId) {
-    return garbageId === 'usedTampon';
+  return garbageId === 'usedTampon';
 }
 
 function increaseScore() {
-    score++;
-    scoreElement.textContent = score;
+  score++;
+  scoreElement.textContent = score;
 }
 
 function playSound(sound) {
-    sound.pause();
-    sound.currentTime = 0;
-    sound.play();
+  sound.pause();
+  sound.currentTime = 0;
+  sound.play();
 }
 
 function startTimer() {
-    startTime = Date.now();
-    timerInterval = setInterval(updateTimer, 1000);
+  startTime = Date.now();
+  timerInterval = setInterval(updateTimer, 1000);
 }
 
 function updateTimer() {
-    const currentTime = Date.now();
-    const timeElapsed = currentTime - startTime;
-    const minutes = Math.floor(timeElapsed / 60000);
-    const seconds = Math.floor((timeElapsed % 60000) / 1000);
-    const formattedTime = `${padZero(minutes)}:${padZero(seconds)}`;
-    timerElement.textContent = formattedTime;
+  const currentTime = Date.now();
+  const timeElapsed = currentTime - startTime;
+  const minutes = Math.floor(timeElapsed / 60000);
+  const seconds = Math.floor((timeElapsed % 60000) / 1000);
+  const formattedTime = `${padZero(minutes)}:${padZero(seconds)}`;
+  timerElement.textContent = formattedTime;
 }
 
 function padZero(number) {
-    return number.toString().padStart(2, '0');
+  return number.toString().padStart(2, '0');
 }
 
 function stopTimer() {
-    clearInterval(timerInterval);
+  clearInterval(timerInterval);
 }
 
 function gameOver() {
-    stopTimer();
-    const finalTime = timerElement.textContent;
-    popupTitleElement.textContent = 'Game Over!';
-    popupTextElement.textContent = `Final Score: ${score}\nTime Taken: ${finalTime}`;
-    popupElement.classList.remove('hide');
+  stopTimer();
+  const finalTime = timerElement.textContent;
+  popupTitleElement.textContent = 'Game Over!';
+  popupTextElement.textContent = `Final Score: ${score}\nTime Taken: ${finalTime}`;
+  popupElement.classList.remove('hide');
 }
 
 function gameWon() {
-    stopTimer();
-    const finalTime = timerElement.textContent;
-    popupTitleElement.textContent = 'You Won!';
-    popupTextElement.textContent = `Final Score: ${score}\nTime Taken: ${finalTime}`;
-    popupElement.classList.remove('hide');
+  stopTimer();
+  const finalTime = timerElement.textContent;
+  popupTitleElement.textContent = 'You Won!';
+  popupTextElement.textContent = `Final Score: ${score}\nTime Taken: ${finalTime}`;
+  popupElement.classList.remove('hide');
 }
 
 function showReason(garbageId, binId) {
-    let reason = '';
-    if (binId === 'recycleBin' && !isRecyclable(garbageId)) {
-        reason = 'Only recyclable items should go in the recycle bin.';
-    } else if (binId === 'foodWasteBin' && !isFoodWaste(garbageId)) {
-        reason = 'Only food waste should go in the food waste bin.';
-    } else if (binId === 'generalTrashBin' && !isGeneralTrash(garbageId)) {
-        reason = 'Only general trash should go in the general trash bin.';
-    } else if (binId === 'dangerTrashCan' && !isDangerTrash(garbageId)) {
-        reason = 'Only dangerous items should go in the danger trash can.';
-    } else if (binId === 'infectiousTrashCan' && !isInfectiousTrash(garbageId)) {
-        reason = 'Only infectious waste should go in the infectious trash can.';
-    }
+  let reason = '';
+  if (binId === 'recycleBin' && !isRecyclable(garbageId)) {
+    reason = 'Only recyclable items should go in the recycle bin.';
+  } else if (binId === 'foodWasteBin' && !isFoodWaste(garbageId)) {
+    reason = 'Only food waste should go in the food waste bin.';
+  } else if (binId === 'generalTrashBin' && !isGeneralTrash(garbageId)) {
+    reason = 'Only general trash should go in the general trash bin.';
+  } else if (binId === 'dangerTrashCan' && !isDangerTrash(garbageId)) {
+    reason = 'Only dangerous items should go in the danger trash can.';
+  } else if (binId === 'infectiousTrashCan' && !isInfectiousTrash(garbageId)) {
+    reason = 'Only infectious waste should go in the infectious trash can.';
+  }
 
-    reasonElement.textContent = reason;
-    reasonElement.classList.remove('hide');
+  reasonElement.textContent = reason;
+  reasonElement.classList.remove('hide');
 }
 
 playAgainBtn.addEventListener('click', () => {
-    popupElement.classList.add('hide');
-    location.reload(); // Reload the page to start a new game
+  popupElement.classList.add('hide');
+  location.reload(); // Reload the page to start a new game
 });
 
+const garbageElements = document.querySelectorAll('.garbage');
 garbageElements.forEach(garbage => {
-    garbage.addEventListener('dragstart', handleDragStart);
+  garbage.addEventListener('dragstart', handleDragStart);
+  garbage.addEventListener('dragend', handleDragEnd);
 });
 
+const bins = document.querySelectorAll('.bin');
 bins.forEach(bin => {
-    bin.addEventListener('dragover', handleDragOver);
-    bin.addEventListener('drop', handleDrop);
+  bin.addEventListener('dragover', handleDragOver);
+  bin.addEventListener('drop', handleDrop);
 });
 
 startTimer();
