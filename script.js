@@ -1,62 +1,23 @@
 // Create audio elements
-var scoreSound = new Audio();
-scoreSound.src = 'images/point.mp3';
-scoreSound.preload = 'auto';
+var scoreSound = new Audio('images/point.mp3');
+var gameOverSound = new Audio('images/game_over.mp3');
 
-var gameOverSound = new Audio();
-gameOverSound.src = 'images/game_over.mp3';
-gameOverSound.preload = 'auto';
-
-// Create audio context
-var audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
-// Function to initialize audio context
-function initializeAudioContext() {
-  // Create an empty buffer source node
-  var buffer = audioContext.createBufferSource();
-
-  // Connect the buffer source to the destination (speakers)
-  buffer.connect(audioContext.destination);
-
-  // Start the buffer source
-  buffer.start();
+// Function to play score sound
+function playScoreSound() {
+  if (scoreSound.paused) {
+    scoreSound.play();
+  } else {
+    scoreSound.currentTime = 0;
+  }
 }
 
-// Check if audio is enabled
-function isAudioEnabled() {
-  return audioContext.state === 'running';
-}
-
-// Function to ask user to enable audio
-function askEnableAudio() {
-  var popup = document.createElement('div');
-  popup.className = 'popup';
-  popup.innerHTML = 'Enable audio in Safari settings to play the game.';
-
-  var enableButton = document.createElement('button');
-  enableButton.textContent = 'Enable Audio';
-  enableButton.addEventListener('click', function () {
-    // Initialize audio context
-    initializeAudioContext();
-
-    // Check if audio is enabled after initialization
-    if (isAudioEnabled()) {
-      overlay.remove();
-    }
-  });
-
-  popup.appendChild(enableButton);
-
-  var overlay = document.createElement('div');
-  overlay.className = 'overlay';
-  overlay.appendChild(popup);
-
-  document.body.appendChild(overlay);
-}
-
-// Check if audio is enabled on page load
-if (!isAudioEnabled()) {
-  askEnableAudio();
+// Function to play game over sound
+function playGameOverSound() {
+  if (gameOverSound.paused) {
+    gameOverSound.play();
+  } else {
+    gameOverSound.currentTime = 0;
+  }
 }
 
 // Drag and drop
@@ -65,13 +26,8 @@ var interactDropzone;
 
 // Counter variables
 var score = 0;
-var totalGarbages = 6;
+var totalGarbages =6;
 var garbagesInCorrectBins = 0;
-
-// Create audio elements
-// var scoreSound = new Audio('images/point.mp3');
-// var gameOverSound = new Audio('images/game_over.mp3');
-// var wonSound = new Audio('images/game_won.mp3');
 
 function initializeGame() {
   interactDraggable = interact('.garbage').draggable({
@@ -97,6 +53,7 @@ function initializeGame() {
   var recycleBin = document.getElementById('recycle-bin');
   var generalTrashBin = document.getElementById('general-trash-bin');
   var foodWasteBin = document.getElementById('food-waste-bin');
+  var dangerBin = document.getElementById('danger-bin');
 
   interactDropzone = interact('.trash-bin').dropzone({
     accept: '.garbage',
@@ -110,8 +67,7 @@ function initializeGame() {
         garbagesInCorrectBins++;
 
         // Play score sound effect
-        scoreSound.currentTime = 0; // Reset sound to start
-        scoreSound.play();
+        playScoreSound();
 
         if (garbagesInCorrectBins === totalGarbages) {
           endGame();
@@ -138,26 +94,25 @@ function dragMoveListener(event) {
 
 // Check if garbage is in the correct bin
 function checkBin(garbage, binId) {
-    if (garbage.id === 'carrots' && binId === 'food-waste-bin') {
-      return true;
-    } else if (
-      (garbage.id === 'can' ||
-        garbage.id === 'plastic-bottle' ||
-        garbage.id === 'newspaper' ||
-        garbage.id === 'plastic-bag') &&
-      binId === 'recycle-bin'
-    ) {
-      return true;
-    } else if (
-      // Add conditions for Danger bin
-      (garbage.id === 'dangerous-item') && 
-      binId === 'danger-bin'
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+  if (garbage.id === 'carrots' && binId === 'food-waste-bin') {
+    return true;
+  } else if (
+    (garbage.id === 'can' ||
+      garbage.id === 'plastic-bottle' ||
+      garbage.id === 'newspaper' ||
+      garbage.id === 'plastic-bag') &&
+    binId === 'recycle-bin'
+  ) {
+    return true;
+  } else if (
+    (garbage.id === 'dangerous-item') &&
+    binId === 'danger-bin'
+  ) {
+    return true;
+  } else {
+    return false;
   }
+}
 
 // Game over
 function endGame() {
@@ -191,8 +146,6 @@ function endGame() {
     overlay.appendChild(popup);
 
     document.body.appendChild(overlay);
-    wonSound.play();
-    score = 0;
 
     // Close popup on click
     overlay.addEventListener('click', function () {
@@ -203,7 +156,7 @@ function endGame() {
     var popup = document.createElement('div');
     popup.className = 'popup';
     popup.innerHTML = 'Game Over! Your score is ' + finalScore;
-    score = 0;
+
     var overlay = document.createElement('div');
     overlay.className = 'overlay';
     overlay.appendChild(popup);
@@ -211,7 +164,7 @@ function endGame() {
     document.body.appendChild(overlay);
 
     // Play game over sound effect
-    gameOverSound.play();
+    playGameOverSound();
 
     // Close popup on click
     overlay.addEventListener('click', function () {
