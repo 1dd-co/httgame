@@ -1,3 +1,12 @@
+// Create audio elements
+var scoreSound = new Audio();
+scoreSound.src = 'images/point.mp3';
+scoreSound.preload = 'auto';
+
+var gameOverSound = new Audio();
+gameOverSound.src = 'images/game_over.mp3';
+gameOverSound.preload = 'auto';
+
 // Create audio context
 var audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -60,9 +69,9 @@ var totalGarbages = 6;
 var garbagesInCorrectBins = 0;
 
 // Create audio elements
-var scoreSound = new Audio('images/point.mp3');
-var gameOverSound = new Audio('images/game_over.mp3');
-var wonSound = new Audio('images/game_won.mp3');
+// var scoreSound = new Audio('images/point.mp3');
+// var gameOverSound = new Audio('images/game_over.mp3');
+// var wonSound = new Audio('images/game_won.mp3');
 
 function initializeGame() {
   interactDraggable = interact('.garbage').draggable({
