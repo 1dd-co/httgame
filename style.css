@@ -1,6 +1,7 @@
 html {
     height: 100vh;
     overflow: hidden;
+    background-color: #F6EBD7;
   }
 
 
@@ -19,34 +20,68 @@ body {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    margin-top: 50px;
   }
   
   .trash-bin {
-    width: 120px;
-    height: 50px;
-    border: 2px solid black;
-    border-radius: 10px;
-    margin: 0 10px;
+    width: 100%;
+    height: auto;
+    border: none;
+    border-radius: 0;
+    margin: 0;
     padding: 10px;
-    background-color: lightgray;
+    background-color: transparent;
     cursor: pointer;
+    aspect-ratio: 1.8;
+    background-repeat: no-repeat;
   }
   
   .garbage {
-    width: 120px;
-    height: 30px;
-    border: 2px solid black;
+    width: 180px;
+    min-height: 200px !important;
+    border: none;
     border-radius: 10px;
     margin: 0;
     padding: 10px;
-    background-color: lightblue;
+    background-color: transparent;
     cursor: pointer;
+    margin: auto;
+    margin-bottom: 100vh;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    align-items: flex-end;
+    justify-content: center;
+    display: flex;
+  }
+
+ .garbagewrap  {
+  display: flex;
+  flex-direction: column;
+    height: 433px;
+  
+ }
+
+ .garbagewrap .trashbin {
+   position: relative;
+    top: 0;
+    display: grid;
+    flex-direction: revert;
+    grid-template-columns: 1fr 1fr;
+    grid-gap:6px
+ }
+  .trashbin {
+    position: relative;
+    top: 0;
+    display: flex;
   }
   
   #score {
     margin-top: 20px;
     font-size: 20px;
+    margin-top: 20px;
+    font-size: 20px;
+    position: fixed;
+    bottom: 10px;
   }
 
 
@@ -74,4 +109,25 @@ body {
   justify-content: center;
   z-index: 9999;
   cursor: pointer;
+}
+
+
+#recycle-bin {
+  background-image: url(images/recyclebin.svg);
+  background-size: contain;
+}
+
+#general-trash-bin {
+  background-image: url(images/generalbin.svg);
+  background-size: contain;
+}
+
+#danger-bin {
+  background-image: url(images/dangerbin.svg);
+  background-size: contain;
+}
+
+#food-waste-bin{
+  background-image: url(images/foodbin.svg);
+  background-size: contain;
 }

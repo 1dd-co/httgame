@@ -7,18 +7,57 @@
     <title>Garbage Sorting Game</title>
   </head>
   <body>
-    <h1>Garbage Sorting Game</h1>
     <div class="game-container">
-      <div class="trash-bin" id="recycle-bin">Recycle Bin</div>
-      <div class="trash-bin" id="general-trash-bin">General Trash Bin</div>
-      <div class="trash-bin" id="food-waste-bin">Food Waste Bin</div>
-      <div id="danger-bin" class="trash-bin">Danger</div>
-      <div class="garbage" id="carrots">Carrots</div>
-      <div class="garbage" id="can">Can</div>
-      <div class="garbage" id="dangerous-item">dangerous-item</div>
-      <div class="garbage" id="plastic-bottle">Plastic Bottle</div>
-      <div class="garbage" id="newspaper">Newspaper</div>
-      <div class="garbage" id="plastic-bag">Plastic Bag</div>
+      <div class="garbagewrap">
+        <div class="trashbin">
+          <div class="trash-bin" id="recycle-bin"></div>
+          <div class="trash-bin" id="general-trash-bin"></div>
+          <div class="trash-bin" id="food-waste-bin"></div>
+          <div id="danger-bin" class="trash-bin"></div>
+        </div>
+        <div
+          class="garbage"
+          id="carrots"
+          style="background-image: url(images/apple.svg)"
+        >
+          แกนแอปเปิ้ล
+        </div>
+        <div
+          class="garbage"
+          id="can"
+          style="background-image: url(images/bottlewater.svg)"
+        >
+          Can
+        </div>
+        <div
+          class="garbage"
+          id="dangerous-item"
+          style="background-image: url(images/brokeglassbottle.svg)"
+        >
+          dangerous-item
+        </div>
+        <div
+          class="garbage"
+          id="plastic-bottle"
+          style="background-image: url(images/plasticbag.svg)"
+        >
+          Plastic Bottle
+        </div>
+        <div
+          class="garbage"
+          id="newspaper"
+          style="background-image: url(images/snackpack.svg)"
+        >
+          Newspaper
+        </div>
+        <div
+          class="garbage"
+          id="plastic-bag"
+          style="background-image: url(images/tissue.svg)"
+        >
+          Plastic Bag
+        </div>
+      </div>
     </div>
     <div id="score">Score: 0</div>
 

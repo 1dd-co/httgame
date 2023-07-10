@@ -144,6 +144,7 @@ function endGame() {
     var overlay = document.createElement('div');
     overlay.className = 'overlay';
     overlay.appendChild(popup);
+    score = 0;
 
     document.body.appendChild(overlay);
 
@@ -162,7 +163,7 @@ function endGame() {
     overlay.appendChild(popup);
 
     document.body.appendChild(overlay);
-
+    score = 0;
     // Play game over sound effect
     playGameOverSound();
 
