@@ -36,8 +36,8 @@ body {
   }
   
   .garbage {
-    width: 180px;
-    min-height: 200px !important;
+    width: 200px;
+    min-height: 240px !important;
     border: none;
     border-radius: 10px;
 
