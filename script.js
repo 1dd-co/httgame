@@ -1,3 +1,55 @@
+// Create audio context
+var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+// Function to initialize audio context
+function initializeAudioContext() {
+  // Create an empty buffer source node
+  var buffer = audioContext.createBufferSource();
+
+  // Connect the buffer source to the destination (speakers)
+  buffer.connect(audioContext.destination);
+
+  // Start the buffer source
+  buffer.start();
+}
+
+// Check if audio is enabled
+function isAudioEnabled() {
+  return audioContext.state === 'running';
+}
+
+// Function to ask user to enable audio
+function askEnableAudio() {
+  var popup = document.createElement('div');
+  popup.className = 'popup';
+  popup.innerHTML = 'Enable audio in Safari settings to play the game.';
+
+  var enableButton = document.createElement('button');
+  enableButton.textContent = 'Enable Audio';
+  enableButton.addEventListener('click', function () {
+    // Initialize audio context
+    initializeAudioContext();
+
+    // Check if audio is enabled after initialization
+    if (isAudioEnabled()) {
+      overlay.remove();
+    }
+  });
+
+  popup.appendChild(enableButton);
+
+  var overlay = document.createElement('div');
+  overlay.className = 'overlay';
+  overlay.appendChild(popup);
+
+  document.body.appendChild(overlay);
+}
+
+// Check if audio is enabled on page load
+if (!isAudioEnabled()) {
+  askEnableAudio();
+}
+
 // Drag and drop
 var interactDraggable;
 var interactDropzone;
@@ -7,8 +59,10 @@ var score = 0;
 var totalGarbages = 5;
 var garbagesInCorrectBins = 0;
 
-// Start time
-var startTime;
+// Create audio elements
+var scoreSound = new Audio('images/point.mp3');
+var gameOverSound = new Audio('images/game_over.mp3');
+var wonSound = new Audio('images/game_won.mp3');
 
 function initializeGame() {
   interactDraggable = interact('.garbage').draggable({
@@ -45,6 +99,10 @@ function initializeGame() {
         garbage.style.display = 'none';
         score += 10;
         garbagesInCorrectBins++;
+
+        // Play score sound effect
+        scoreSound.currentTime = 0; // Reset sound to start
+        scoreSound.play();
 
         if (garbagesInCorrectBins === totalGarbages) {
           endGame();
@@ -88,66 +146,63 @@ function checkBin(garbage, binId) {
 
 // Game over
 function endGame() {
-    interactDraggable.unset();
-    interactDropzone.unset();
-  
-    // Reset garbage positions
-    var garbages = document.querySelectorAll('.garbage');
-    for (var i = 0; i < garbages.length; i++) {
-      garbages[i].style.transform = 'none';
-      garbages[i].setAttribute('data-x', '0');
-      garbages[i].setAttribute('data-y', '0');
-      garbages[i].style.display = 'block';
-    }
-  
-    var finalScore = score;
-    score = 0;
-    garbagesInCorrectBins = 0;
-  
-    document.getElementById('score').textContent = 'Score: ' + finalScore;
-  
-    var currentTime = new Date().getTime();
-    var elapsedTime = (currentTime - startTime) / 1000; // Calculate elapsed time in seconds
-  
+  interactDraggable.unset();
+  interactDropzone.unset();
+
+  // Reset garbage positions
+  var garbages = document.querySelectorAll('.garbage');
+  for (var i = 0; i < garbages.length; i++) {
+    garbages[i].style.transform = 'none';
+    garbages[i].setAttribute('data-x', '0');
+    garbages[i].setAttribute('data-y', '0');
+    garbages[i].style.display = 'block';
+  }
+
+  var finalScore = score;
+  score = 0;
+  garbagesInCorrectBins = 0;
+
+  document.getElementById('score').textContent = 'Score: ' + finalScore;
+
+  if (finalScore === totalGarbages * 10) {
     var popup = document.createElement('div');
-    popup.className = 'popup';
-  
-    if (finalScore === totalGarbages * 10) {
-      popup.innerHTML =
-        'Congratulations! You cleared the game with a perfect score of ' +
-        finalScore +
-        ' in ' +
-        elapsedTime.toFixed(1) +
-        ' seconds.';
-    } else {
-      popup.innerHTML =
-        'Game Over! Your score is ' +
-        finalScore +
-        ' in ' +
-        elapsedTime.toFixed(1) +
-        ' seconds.';
-    }
-  
+    popup.className = 'popup congratulations';
+    popup.innerHTML =
+      'Congratulations! You cleared the game with a perfect score of ' +
+      finalScore;
+
     var overlay = document.createElement('div');
     overlay.className = 'overlay';
     overlay.appendChild(popup);
-  
+
     document.body.appendChild(overlay);
-  
+    wonSound.play();
+
+    // Close popup on click
+    overlay.addEventListener('click', function () {
+      overlay.remove();
+      initializeGame(); // Start a new game
+    });
+  } else {
+    var popup = document.createElement('div');
+    popup.className = 'popup';
+    popup.innerHTML = 'Game Over! Your score is ' + finalScore;
+
+    var overlay = document.createElement('div');
+    overlay.className = 'overlay';
+    overlay.appendChild(popup);
+
+    document.body.appendChild(overlay);
+
+    // Play game over sound effect
+    gameOverSound.play();
+
     // Close popup on click
     overlay.addEventListener('click', function () {
       overlay.remove();
       initializeGame(); // Start a new game
     });
   }
-  
-  // ...
-  
-  // Start the stopwatch
-  function startStopwatch() {
-    startTime = new Date().getTime();
-  }
-  
-  initializeGame(); // Start the initial game
-  startStopwatch(); // Start the stopwatch
-  
+}
+
+initializeGame(); // Start the initial game
