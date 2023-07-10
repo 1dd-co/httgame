@@ -56,7 +56,7 @@ var interactDropzone;
 
 // Counter variables
 var score = 0;
-var totalGarbages = 5;
+var totalGarbages = 6;
 var garbagesInCorrectBins = 0;
 
 // Create audio elements
@@ -129,20 +129,26 @@ function dragMoveListener(event) {
 
 // Check if garbage is in the correct bin
 function checkBin(garbage, binId) {
-  if (garbage.id === 'carrots' && binId === 'food-waste-bin') {
-    return true;
-  } else if (
-    (garbage.id === 'can' ||
-      garbage.id === 'plastic-bottle' ||
-      garbage.id === 'newspaper' ||
-      garbage.id === 'plastic-bag') &&
-    binId === 'recycle-bin'
-  ) {
-    return true;
-  } else {
-    return false;
+    if (garbage.id === 'carrots' && binId === 'food-waste-bin') {
+      return true;
+    } else if (
+      (garbage.id === 'can' ||
+        garbage.id === 'plastic-bottle' ||
+        garbage.id === 'newspaper' ||
+        garbage.id === 'plastic-bag') &&
+      binId === 'recycle-bin'
+    ) {
+      return true;
+    } else if (
+      // Add conditions for Danger bin
+      (garbage.id === 'dangerous-item') && 
+      binId === 'danger-bin'
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
-}
 
 // Game over
 function endGame() {
@@ -177,6 +183,7 @@ function endGame() {
 
     document.body.appendChild(overlay);
     wonSound.play();
+    score = 0;
 
     // Close popup on click
     overlay.addEventListener('click', function () {
@@ -187,7 +194,7 @@ function endGame() {
     var popup = document.createElement('div');
     popup.className = 'popup';
     popup.innerHTML = 'Game Over! Your score is ' + finalScore;
-
+    score = 0;
     var overlay = document.createElement('div');
     overlay.className = 'overlay';
     overlay.appendChild(popup);
