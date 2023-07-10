@@ -94,19 +94,23 @@ function dragMoveListener(event) {
 
 // Check if garbage is in the correct bin
 function checkBin(garbage, binId) {
-  if (garbage.id === 'carrots' && binId === 'food-waste-bin') {
+  if (garbage.id === 'apple' && binId === 'food-waste-bin') {
     return true;
   } else if (
-    (garbage.id === 'can' ||
-      garbage.id === 'plastic-bottle' ||
-      garbage.id === 'newspaper' ||
-      garbage.id === 'plastic-bag') &&
+    (garbage.id === 'bottlewater' )&&
     binId === 'recycle-bin'
   ) {
     return true;
   } else if (
-    (garbage.id === 'dangerous-item') &&
+    (garbage.id === 'brokeglassbottle') &&
     binId === 'danger-bin'
+  ) {
+    return true;
+  } else if (
+    (garbage.id === 'tissue' ||
+    garbage.id === 'plasticbag' ||
+    garbage.id === 'snackpack') &&
+    binId === 'general-trash-bin'
   ) {
     return true;
   } else {
