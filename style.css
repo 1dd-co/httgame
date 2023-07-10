@@ -1,5 +1,5 @@
 html {
-    height: 100svh;
+    
     overflow: hidden;
     background-color: #F6EBD7;
   }
@@ -9,6 +9,8 @@ html {
 body {
     font-family: Arial, sans-serif;
     text-align: center;
+    height: 90svh;
+    overflow: hidden;
   }
   
   
